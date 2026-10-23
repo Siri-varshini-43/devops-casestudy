@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Study Planner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <h2>📚 StudyMate</h2>
+        <nav>
+            <a href="#dashboard">🏠 Dashboard</a>
+            <a href="#subjects">📖 Subjects</a>
+            <a href="#sessions">📝 Study Sessions</a>
+            <a href="#goals">🎯 Daily Goals</a>
+        </nav>
+        <p class="sidebar-note">Learn a little every day!</p>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <h1>Student Study Planner</h1>
+                <p>Plan smart. Study better. Achieve more.</p>
+            </div>
+            <div class="today" id="today"></div>
+        </header>
+
+        <section id="dashboard">
+            <h2>Dashboard Overview</h2>
+
+            <div class="stats">
+                <div class="stat-card purple">
+                    <span>Total Subjects</span>
+                    <h2 id="subjectCount">0</h2>
+                </div>
+                <div class="stat-card blue">
+                    <span>Total Sessions</span>
+                    <h2 id="sessionCount">0</h2>
+                </div>
+                <div class="stat-card green">
+                    <span>Completed Sessions</span>
+                    <h2 id="completedCount">0</h2>
+                </div>
+                <div class="stat-card orange">
+                    <span>Pending Goals</span>
+                    <h2 id="pendingGoals">0</h2>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" id="subjects">
+            <h2>📖 Manage Subjects</h2>
+
+            <form id="subjectForm" class="input-row">
+                <input id="subjectName" type="text"
+                    placeholder="Enter subject name" required>
+                <button type="submit">+ Add Subject</button>
+            </form>
+
+            <div id="subjectList" class="subject-list"></div>
+        </section>
+
+        <section class="panel" id="sessions">
+            <h2>📝 Study Sessions</h2>
+
+            <form id="sessionForm" class="form-grid">
+                <input id="topic" type="text"
+                    placeholder="Topic to study" required>
+
+                <select id="subjectSelect" required>
+                    <option value="">Select subject</option>
+                </select>
+
+                <input id="studyDate" type="date" required>
+
+                <input id="duration" type="number"
+                    min="1" placeholder="Duration (minutes)" required>
+
+                <button type="submit" class="full-width">
+                    + Add Study Session
+                </button>
+            </form>
+
+            <div id="sessionList"></div>
+        </section>
+
+        <section class="panel" id="goals">
+            <h2>🎯 Daily Goals</h2>
+
+            <form id="goalForm" class="input-row">
+                <input id="goalName" type="text"
+                    placeholder="Example: Complete 2 DSA problems" required>
+                <button type="submit">+ Add Goal</button>
+            </form>
+
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Today's goal progress</span>
+                    <strong id="progressText">0%</strong>
+                </div>
+                <div class="progress-bar">
+                    <div id="progressFill"></div>
+                </div>
+            </div>
+
+            <div id="goalList"></div>
+        </section>
+
+        <footer>
+            Made for productive students 💜
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
+</body>
+</html>
