@@ -13,8 +13,7 @@ pipeline {
     stages {
         stage('Checkout Source Code') {
             steps {
-                checkout scm
-                echo 'Source code downloaded successfully.'
+                echo 'Source code downloaded from GitHub.'
             }
         }
 
@@ -22,9 +21,11 @@ pipeline {
             steps {
                 script {
                     def requiredFiles = [
-                        'index.html',
-                        'style.css',
-                        'script.js'
+                        'app.py',
+                        'requirements.txt',
+                        'templates/index.html',
+                        'static/style.css',
+                        'static/scripts.js'
                     ]
 
                     for (file in requiredFiles) {
@@ -32,7 +33,7 @@ pipeline {
                             error("Required file missing: ${file}")
                         }
 
-                        echo "Found required file: ${file}"
+                        echo "PASS: Found ${file}"
                     }
                 }
             }
@@ -41,17 +42,31 @@ pipeline {
         stage('Validate HTML') {
             steps {
                 script {
-                    def html = readFile('index.html')
+                    def html = readFile('templates/index.html').toLowerCase()
 
-                    if (!html.toLowerCase().contains('<html')) {
-                        error('HTML validation failed: HTML tag missing.')
+                    if (!html.contains('<html')) {
+                        error('Opening HTML tag is missing.')
                     }
 
-                    if (!html.toLowerCase().contains('</html>')) {
-                        error('HTML validation failed: closing HTML tag missing.')
+                    if (!html.contains('</html>')) {
+                        error('Closing HTML tag is missing.')
                     }
 
-                    echo 'HTML basic validation passed.'
+                    echo 'PASS: HTML structure validated.'
+                }
+            }
+        }
+
+        stage('Validate CSS') {
+            steps {
+                script {
+                    def css = readFile('static/style.css')
+
+                    if (css.trim().isEmpty()) {
+                        error('CSS file is empty.')
+                    }
+
+                    echo 'PASS: CSS file validated.'
                 }
             }
         }
@@ -59,32 +74,32 @@ pipeline {
         stage('Validate JavaScript') {
             steps {
                 script {
-                    def js = readFile('script.js')
+                    def js = readFile('static/scripts.js')
 
                     if (js.trim().isEmpty()) {
-                        error('JavaScript validation failed: script.js is empty.')
+                        error('JavaScript file is empty.')
                     }
 
-                    echo 'JavaScript file is present and non-empty.'
+                    echo 'PASS: JavaScript file validated.'
                 }
             }
         }
 
-        stage('CI Build Complete') {
+        stage('CI Complete') {
             steps {
-                echo 'Student Study Planner passed all configured checks.'
-                echo 'Continuous Integration pipeline completed successfully.'
+                echo 'All configured checks passed.'
+                echo 'Flask application source validation completed.'
             }
         }
     }
 
     post {
         success {
-            echo 'BUILD SUCCESS: All configured checks passed.'
+            echo 'BUILD SUCCESS: Flask application validated.'
         }
 
         failure {
-            echo 'BUILD FAILED: Check Console Output for details.'
+            echo 'BUILD FAILED: Check Console Output.'
         }
     }
 }
